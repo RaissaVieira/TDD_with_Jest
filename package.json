@@ -1,0 +1,16 @@
+{
+  "name": "TDD_with_Jest",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/RaissaVieira/TDD_with_Jest.git",
+  "author": "Raissa Vieira <raissavieira125@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.5.1",
+    "sequelize": "^6.4.0"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.2.0"
+  }
+}
