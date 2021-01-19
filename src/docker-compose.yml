@@ -1,0 +1,39 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:latest
+
+    networks:
+      - test-net
+    container_name: postgres-test
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_USER=docker
+      - POSTGRES_DB=test
+  pgadmin:
+    image: dpage/pgadmin4:latest
+
+    networks:
+      - test-net
+    container_name: pgadmin-test
+    volumes:
+      - pgadmin-pg:/var/lib/pgadmin
+    expose:
+      - 15432
+    ports:
+      - 15432:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@teste.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+networks:
+  test-net:
+
+volumes:
+  postgres-db:
+  pgadmin-pg:
