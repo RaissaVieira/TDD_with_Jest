@@ -15,7 +15,6 @@ services:
     environment:
       - POSTGRES_PASSWORD=docker
       - POSTGRES_USER=docker
-      - POSTGRES_DB=test
   pgadmin:
     image: dpage/pgadmin4:latest
 
