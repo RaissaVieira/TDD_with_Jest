@@ -1,7 +1,7 @@
 const request = require('supertest');
 const app = require('../../src/app');
-const { User } = require('../../src/app/models');
-const truncate = require('../utils/truncate')
+const truncate = require('../utils/truncate');
+const factory = require('../factories')
 
 describe('Athentication', () => {
     beforeEach(async() => {
@@ -9,9 +9,7 @@ describe('Athentication', () => {
     });
 
     it('should authenticated with valid credentials', async() => {
-        const user = await User.create({
-            name: 'Raissa',
-            email: 'raissa@vieira',
+        const user = await factory.create('User', {
             password: '123456'
         });
 
@@ -26,9 +24,7 @@ describe('Athentication', () => {
     });
 
     it('should not athenticate with invalid crendentials', async() => {
-        const user = await User.create({
-            name: 'Raissa',
-            email: 'raissa@vieira',
+        const user = await factory.create('User', {
             password: '123456'
         });
 
@@ -43,9 +39,7 @@ describe('Athentication', () => {
     });
 
     it('should return jwt token when athenticated', async() => {
-        const user = await User.create({
-            name: 'Raissa',
-            email: 'raissa@vieira',
+        const user = await factory.create('User', {
             password: '123456'
         });
 
@@ -57,5 +51,32 @@ describe('Athentication', () => {
             })
 
         expect(response.body).toHaveProperty("token");
+    });
+
+    it('should be able to acess private routes when athenticated', async() => {
+        const user = await factory.create('User', {
+            password: '123456'
+        });
+
+        const response = await request(app)
+            .get('/dashboard')
+            .set('Authorization', `Bearer ${user.generateToken()}`);
+
+        expect(response.status).toBe(200);
+    });
+
+    it('should not be able to acess private routes without JWT token', async() => {
+        const response = await request(app)
+            .get('/dashboard')
+
+        expect(response.status).toBe(401);
+    });
+
+    it('should not be able to acess private routes with invalid JWT token', async() => {
+        const response = await request(app)
+            .get('/dashboard')
+            .set('Authorization', `Bearer 123123`);
+
+        expect(response.status).toBe(401);
     });
 });
